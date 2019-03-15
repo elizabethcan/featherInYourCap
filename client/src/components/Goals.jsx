@@ -4,7 +4,8 @@ const Goals = (props) => {
   if (props.view === 'goals') {
     return (
       <div>
-        Create a New Goal!
+        <div>You Have ${props.toSpend} To Contribute To A Goal!</div>
+        <div>Create a New Goal:</div>
         <select>
           <option>Travel</option>
           <option>House</option>

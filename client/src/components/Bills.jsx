@@ -8,7 +8,7 @@ const Bills = (props) => {
         <div>What are your monthly recurring bills?</div>
         <Bill bills={props.bills} setBill={props.setBill}/>
         <div>
-          <button type="submit" onClick={props.submit}>Submit</button>
+          <button type="submit" onClick={props.totalBills}>Submit</button>
         </div>
       </div>
     )

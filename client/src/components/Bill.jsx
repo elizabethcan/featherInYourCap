@@ -5,7 +5,7 @@ const Bill = (props) => {
     <div>
       {Object.keys(props.bills).map((bill) => {
         return (
-          <div>
+          <div key={bill}>
             <div>{bill}</div>
             <div>
               Amount:

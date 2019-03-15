@@ -6,9 +6,10 @@ import Goals from './Goals.jsx';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.changeState = this.changeState.bind(this);
+    this.changePay = this.changePay.bind(this);
     this.changeView = this.changeView.bind(this);
     this.addBill = this.addBill.bind(this);
+    this.totalBills = this.totalBills.bind(this);
     this.state = {
       pay: undefined,
       bills: {
@@ -20,14 +21,15 @@ class App extends React.Component {
         Fuel: undefined,
         Other: undefined
       },
+      toSpend: 0,
       views: ['salary', 'bills', 'goals'],
       view: 0
     }
   }
 
-  changeState(event) {
+  changePay(event) {
     this.setState({
-      [event.target.id]: event.target.value,
+      [event.target.id]: parseInt(event.target.value),
     });
   }
 
@@ -40,17 +42,33 @@ class App extends React.Component {
   }
 
   addBill(event) {
-    console.log(event.target.id);
-    console.log(event.target.value);
+    var bills = this.state.bills;
+    bills[event.target.id] = parseInt(event.target.value) || undefined;
+    this.setState({
+      bills: bills,
+    })
+  }
+
+  totalBills(event) {
+    event.preventDefault();
+    var totalSpent = 0;
+    for (var bill in this.state.bills) {
+      totalSpent += this.state.bills[bill];
+    }
+    var toSpend = this.state.pay - totalSpent;
+    this.setState({
+      toSpend: toSpend,
+    });
+    this.changeView(event);
   }
 
   render() {
     return (
       <div>
         <h1>Feather In Your Cap</h1>
-        <Salary pay={this.state.pay} changePay={this.changeState} view={this.state.views[this.state.view]} submit={this.changeView}/>
-        <Bills bills={this.state.bills} view={this.state.views[this.state.view]} submit={this.changeView} setBill={this.addBill}/>
-        <Goals view={this.state.views[this.state.view]}/>
+        <Salary pay={this.state.pay} changePay={this.changePay} view={this.state.views[this.state.view]} submit={this.changeView}/>
+        <Bills bills={this.state.bills} view={this.state.views[this.state.view]} submit={this.changeView} setBill={this.addBill} totalBills={this.totalBills}/>
+        <Goals toSpend={this.state.toSpend} view={this.state.views[this.state.view]}/>
       </div>
     );
   }
