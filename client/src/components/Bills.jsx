@@ -6,7 +6,7 @@ const Bills = (props) => {
     return (
       <div id="bills">
         <div>What are your monthly recurring bills?</div>
-        <Bill bills={props.bills}/>
+        <Bill bills={props.bills} setBill={props.setBill}/>
         <div>
           <button type="submit" onClick={props.submit}>Submit</button>
         </div>

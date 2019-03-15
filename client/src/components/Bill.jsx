@@ -9,7 +9,7 @@ const Bill = (props) => {
             <div>{bill}</div>
             <div>
               Amount:
-              <input></input>
+              <input id={bill} value={props.bills[bill]} onChange={props.setBill}></input>
             </div>
           </div>
         );

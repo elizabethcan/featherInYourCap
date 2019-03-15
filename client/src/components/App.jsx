@@ -34,29 +34,22 @@ class App extends React.Component {
   changeView(event) {
     event.preventDefault();
     let view = this.state.view + 1;
-    console.log(view);
     this.setState({
       view: view
     });
   }
 
   addBill(event) {
-    if (this.state.bills === undefined) {
-      let bills = event.target.value
-    } else {
-      let bills = this.state.bills + event.target.value
-    }
-    this.setState({
-      bills: bills
-    });
+    console.log(event.target.id);
+    console.log(event.target.value);
   }
 
   render() {
     return (
       <div>
-        <h1>You Can Afford That Too</h1>
+        <h1>Feather In Your Cap</h1>
         <Salary pay={this.state.pay} changePay={this.changeState} view={this.state.views[this.state.view]} submit={this.changeView}/>
-        <Bills bills={this.state.bills} view={this.state.views[this.state.view]} submit={this.changeView}/>
+        <Bills bills={this.state.bills} view={this.state.views[this.state.view]} submit={this.changeView} setBill={this.addBill}/>
         <Goals view={this.state.views[this.state.view]}/>
       </div>
     );
