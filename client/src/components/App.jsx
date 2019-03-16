@@ -3,9 +3,6 @@ import Salary from './Salary.jsx';
 import Bills from './Bills.jsx';
 import Goals from './Goals.jsx';
 import Travel from './Travel.jsx';
-import House from './House.jsx';
-import Car from './Car.jsx';
-import Retirement from './Retirement.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -16,7 +13,6 @@ class App extends React.Component {
     this.addBill = this.addBill.bind(this);
     this.totalBills = this.totalBills.bind(this);
     this.setGoal = this.setGoal.bind(this);
-    this.showPlan = this.showPlan.bind(this);
     this.state = {
       pay: undefined,
       bills: {
@@ -106,7 +102,7 @@ class App extends React.Component {
       <div>
         <h1>Feather In Your Cap</h1>
         <div>
-          <Salary pay={this.state.pay} changePay={this.changeState} view={this.state.views[this.state.view]} submit={this.moveForward}/>
+          <Salary pay={this.state.pay} changePay={this.changeState} submit={this.moveForward} view={this.state.views[this.state.view]}/>
           <Bills bills={this.state.bills} view={this.state.views[this.state.view]} back={this.moveBackward} submit={this.moveForward} setBill={this.addBill} totalBills={this.totalBills}/>
           <Goals toSpend={this.state.toSpend} view={this.state.views[this.state.view]} back={this.moveBackward} setGoal={this.setGoal}/>
           <Travel view={this.state.views[this.state.view]} months={this.state.monthsToGoal} setMonths={this.changeState}/>
