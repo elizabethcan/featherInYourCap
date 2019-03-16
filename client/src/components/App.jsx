@@ -125,13 +125,15 @@ class App extends React.Component {
     return (
       <div>
         <h1>Feather In Your Cap</h1>
-        <Salary pay={this.state.pay} changePay={this.changeState} view={this.state.views[this.state.view]} submit={this.moveForward}/>
-        <Bills bills={this.state.bills} view={this.state.views[this.state.view]} back={this.moveBackward} submit={this.moveForward} setBill={this.addBill} totalBills={this.totalBills}/>
-        <Goals toSpend={this.state.toSpend} view={this.state.views[this.state.view]} back={this.moveBackward} setGoal={this.setGoal}/>
-        <Travel view={this.state.views[this.state.view]} months={this.state.monthsToGoal} setMonths={this.changeState}/>
-        <House view={this.state.views[this.state.view]}/>
-        <Car view={this.state.views[this.state.view]}/>
-        <Retirement dispalyPlan={this.state.displayPlan} currentSavings={this.state.currentSavings} changeSavings={this.changeSavings} view={this.state.views[this.state.view]} submit={this.showPlan}/>
+        <div>
+          <Salary pay={this.state.pay} changePay={this.changeState} view={this.state.views[this.state.view]} submit={this.moveForward}/>
+          <Bills bills={this.state.bills} view={this.state.views[this.state.view]} back={this.moveBackward} submit={this.moveForward} setBill={this.addBill} totalBills={this.totalBills}/>
+          <Goals toSpend={this.state.toSpend} view={this.state.views[this.state.view]} back={this.moveBackward} setGoal={this.setGoal}/>
+          <Travel view={this.state.views[this.state.view]} months={this.state.monthsToGoal} setMonths={this.changeState}/>
+          <House view={this.state.views[this.state.view]}/>
+          <Car view={this.state.views[this.state.view]}/>
+          <Retirement dispalyPlan={this.state.displayPlan} currentSavings={this.state.currentSavings} changeSavings={this.changeSavings} view={this.state.views[this.state.view]} submit={this.showPlan}/>
+        </div>
       </div>
     );
   }
