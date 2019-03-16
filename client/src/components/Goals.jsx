@@ -10,6 +10,9 @@ const Goals = (props) => {
         <button id="houseGoal" onClick={props.setGoal}>House</button>
         <button id="carGoal" onClick={props.setGoal}>Car</button>
         <button id="retirementGoal" onClick={props.setGoal}>Retirement</button>
+        <div>
+          <button onClick={props.back}>Back</button>
+        </div>
       </div>
     )
   } else {

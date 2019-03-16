@@ -11,7 +11,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.changePay = this.changePay.bind(this);
-    this.changeView = this.changeView.bind(this);
+    this.moveForward = this.moveForward.bind(this);
+    this.moveBackward = this.moveBackward.bind(this);
     this.addBill = this.addBill.bind(this);
     this.totalBills = this.totalBills.bind(this);
     this.setGoal = this.setGoal.bind(this);
@@ -40,9 +41,17 @@ class App extends React.Component {
     });
   }
 
-  changeView(event) {
+  moveForward(event) {
     event.preventDefault();
     let view = this.state.view + 1;
+    this.setState({
+      view: view
+    });
+  }
+
+  moveBackward(event) {
+    event.preventDefault();
+    let view = this.state.view - 1;
     this.setState({
       view: view
     });
@@ -68,7 +77,7 @@ class App extends React.Component {
     this.setState({
       toSpend: toSpend,
     });
-    this.changeView(event);
+    this.moveForward(event);
   }
 
   setGoal(event) {
@@ -94,9 +103,9 @@ class App extends React.Component {
     return (
       <div>
         <h1>Feather In Your Cap</h1>
-        <Salary pay={this.state.pay} changePay={this.changePay} view={this.state.views[this.state.view]} submit={this.changeView}/>
-        <Bills bills={this.state.bills} view={this.state.views[this.state.view]} submit={this.changeView} setBill={this.addBill} totalBills={this.totalBills}/>
-        <Goals toSpend={this.state.toSpend} view={this.state.views[this.state.view]} setGoal={this.setGoal}/>
+        <Salary pay={this.state.pay} changePay={this.changePay} view={this.state.views[this.state.view]} submit={this.moveForward}/>
+        <Bills bills={this.state.bills} view={this.state.views[this.state.view]} back={this.moveBackward} submit={this.moveForward} setBill={this.addBill} totalBills={this.totalBills}/>
+        <Goals toSpend={this.state.toSpend} view={this.state.views[this.state.view]} back={this.moveBackward} setGoal={this.setGoal}/>
         <Travel view={this.state.views[this.state.view]}/>
         <House view={this.state.views[this.state.view]}/>
         <Car view={this.state.views[this.state.view]}/>
