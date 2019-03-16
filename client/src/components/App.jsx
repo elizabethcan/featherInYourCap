@@ -11,7 +11,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.changeState = this.changeState.bind(this);
-    this.changeSavings = this.changeSavings.bind(this);
     this.moveForward = this.moveForward.bind(this);
     this.moveBackward = this.moveBackward.bind(this);
     this.addBill = this.addBill.bind(this);
@@ -30,12 +29,9 @@ class App extends React.Component {
         Other: undefined
       },
       toSpend: 0,
-      currentSavings: undefined,
       views: ['salary', 'bills', 'goals', 'travelGoal', 'houseGoal', 'carGoal', 'retirementGoal'],
       view: 0,
-      goal: undefined,
       monthsToGoal: undefined,
-      displayPlan: false,
     }
   }
 
@@ -46,15 +42,6 @@ class App extends React.Component {
     var value = parseInt(event.target.value) || undefined;
     this.setState({
       [event.target.name]: value,
-    });
-  }
-
-  changeSavings(event) {
-    console.log(`inside currentSavings`)
-    var currentSavings = parseInt(event.target.value) || undefined;
-    console.log(currentSavings)
-    this.setState({
-      currentSavings: currentSavings,
     });
   }
 
@@ -114,13 +101,6 @@ class App extends React.Component {
     });
   }
 
-  showPlan(event) {
-    event.preventDefault();
-    this.setState({
-      displayPlan: true,
-    })
-  }
-
   render() {
     return (
       <div>
@@ -130,9 +110,6 @@ class App extends React.Component {
           <Bills bills={this.state.bills} view={this.state.views[this.state.view]} back={this.moveBackward} submit={this.moveForward} setBill={this.addBill} totalBills={this.totalBills}/>
           <Goals toSpend={this.state.toSpend} view={this.state.views[this.state.view]} back={this.moveBackward} setGoal={this.setGoal}/>
           <Travel view={this.state.views[this.state.view]} months={this.state.monthsToGoal} setMonths={this.changeState}/>
-          <House view={this.state.views[this.state.view]}/>
-          <Car view={this.state.views[this.state.view]}/>
-          <Retirement dispalyPlan={this.state.displayPlan} currentSavings={this.state.currentSavings} changeSavings={this.changeSavings} view={this.state.views[this.state.view]} submit={this.showPlan}/>
         </div>
       </div>
     );
