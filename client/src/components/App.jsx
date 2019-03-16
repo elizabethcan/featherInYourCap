@@ -11,13 +11,16 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.changePay = this.changePay.bind(this);
+    this.changeSavings = this.changeSavings.bind(this);
     this.moveForward = this.moveForward.bind(this);
     this.moveBackward = this.moveBackward.bind(this);
     this.addBill = this.addBill.bind(this);
     this.totalBills = this.totalBills.bind(this);
     this.setGoal = this.setGoal.bind(this);
+    this.showPlan = this.showPlan.bind(this);
     this.state = {
       pay: undefined,
+      currentSavings: undefined,
       bills: {
         Rent: undefined,
         Utilities: undefined,
@@ -31,6 +34,7 @@ class App extends React.Component {
       views: ['salary', 'bills', 'goals', 'travelGoal', 'houseGoal', 'carGoal', 'retirementGoal'],
       view: 0,
       goal: undefined,
+      displayPlan: false,
     }
   }
 
@@ -38,6 +42,15 @@ class App extends React.Component {
     var pay = parseInt(event.target.value) || undefined;
     this.setState({
       pay: pay,
+    });
+  }
+
+  changeSavings(event) {
+    console.log(`inside currentSavings`)
+    var currentSavings = parseInt(event.target.value) || undefined;
+    console.log(currentSavings)
+    this.setState({
+      currentSavings: currentSavings,
     });
   }
 
@@ -81,22 +94,27 @@ class App extends React.Component {
   }
 
   setGoal(event) {
-    console.log(event.target.id);
     var goal = event.target.id;
     var view = this.state.view;
-    var view;
     if (goal === 'travelGoal') {
       view = 3;
-    } else if (goal = 'houseGoal') {
+    } else if (goal === 'houseGoal') {
       view = 4;
-    } else if (goal = 'carGoal') {
+    } else if (goal === 'carGoal') {
       view = 5;
-    } else if (goal = 'retirementGoal') {
+    } else if (goal === 'retirementGoal') {
       view = 6;
     }
     this.setState({
       view: view,
     });
+  }
+
+  showPlan(event) {
+    event.preventDefault();
+    this.setState({
+      displayPlan: true,
+    })
   }
 
   render() {
@@ -109,7 +127,7 @@ class App extends React.Component {
         <Travel view={this.state.views[this.state.view]}/>
         <House view={this.state.views[this.state.view]}/>
         <Car view={this.state.views[this.state.view]}/>
-        <Retirement view={this.state.views[this.state.view]}/>
+        <Retirement dispalyPlan={this.state.displayPlan} currentSavings={this.state.currentSavings} changeSavings={this.changeSavings} view={this.state.views[this.state.view]} submit={this.showPlan}/>
       </div>
     );
   }

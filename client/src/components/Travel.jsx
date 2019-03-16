@@ -5,6 +5,7 @@ const Travel = (props) => {
     return (
       <div>
         <div>Travel</div>
+        
       </div>
     )
   } else {
