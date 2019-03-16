@@ -10,7 +10,7 @@ import Retirement from './Retirement.jsx';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.changePay = this.changePay.bind(this);
+    this.changeState = this.changeState.bind(this);
     this.changeSavings = this.changeSavings.bind(this);
     this.moveForward = this.moveForward.bind(this);
     this.moveBackward = this.moveBackward.bind(this);
@@ -20,7 +20,6 @@ class App extends React.Component {
     this.showPlan = this.showPlan.bind(this);
     this.state = {
       pay: undefined,
-      currentSavings: undefined,
       bills: {
         Rent: undefined,
         Utilities: undefined,
@@ -31,17 +30,22 @@ class App extends React.Component {
         Other: undefined
       },
       toSpend: 0,
+      currentSavings: undefined,
       views: ['salary', 'bills', 'goals', 'travelGoal', 'houseGoal', 'carGoal', 'retirementGoal'],
       view: 0,
       goal: undefined,
+      monthsToGoal: undefined,
       displayPlan: false,
     }
   }
 
-  changePay(event) {
-    var pay = parseInt(event.target.value) || undefined;
+  componentDidMount() {
+  }
+
+  changeState(event) {
+    var value = parseInt(event.target.value) || undefined;
     this.setState({
-      pay: pay,
+      [event.target.name]: value,
     });
   }
 
@@ -121,10 +125,10 @@ class App extends React.Component {
     return (
       <div>
         <h1>Feather In Your Cap</h1>
-        <Salary pay={this.state.pay} changePay={this.changePay} view={this.state.views[this.state.view]} submit={this.moveForward}/>
+        <Salary pay={this.state.pay} changePay={this.changeState} view={this.state.views[this.state.view]} submit={this.moveForward}/>
         <Bills bills={this.state.bills} view={this.state.views[this.state.view]} back={this.moveBackward} submit={this.moveForward} setBill={this.addBill} totalBills={this.totalBills}/>
         <Goals toSpend={this.state.toSpend} view={this.state.views[this.state.view]} back={this.moveBackward} setGoal={this.setGoal}/>
-        <Travel view={this.state.views[this.state.view]}/>
+        <Travel view={this.state.views[this.state.view]} months={this.state.monthsToGoal} setMonths={this.changeState}/>
         <House view={this.state.views[this.state.view]}/>
         <Car view={this.state.views[this.state.view]}/>
         <Retirement dispalyPlan={this.state.displayPlan} currentSavings={this.state.currentSavings} changeSavings={this.changeSavings} view={this.state.views[this.state.view]} submit={this.showPlan}/>
