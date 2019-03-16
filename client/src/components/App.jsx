@@ -2,6 +2,10 @@ import React from 'react';
 import Salary from './Salary.jsx';
 import Bills from './Bills.jsx';
 import Goals from './Goals.jsx';
+import Travel from './Travel.jsx';
+import House from './House.jsx';
+import Car from './Car.jsx';
+import Retirement from './Retirement.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -10,6 +14,7 @@ class App extends React.Component {
     this.changeView = this.changeView.bind(this);
     this.addBill = this.addBill.bind(this);
     this.totalBills = this.totalBills.bind(this);
+    this.setGoal = this.setGoal.bind(this);
     this.state = {
       pay: undefined,
       bills: {
@@ -22,8 +27,9 @@ class App extends React.Component {
         Other: undefined
       },
       toSpend: 0,
-      views: ['salary', 'bills', 'goals'],
-      view: 0
+      views: ['salary', 'bills', 'goals', 'travelGoal', 'houseGoal', 'carGoal', 'retirementGoal'],
+      view: 0,
+      goal: undefined,
     }
   }
 
@@ -65,13 +71,36 @@ class App extends React.Component {
     this.changeView(event);
   }
 
+  setGoal(event) {
+    console.log(event.target.id);
+    var goal = event.target.id;
+    var view = this.state.view;
+    var view;
+    if (goal === 'travelGoal') {
+      view = 3;
+    } else if (goal = 'houseGoal') {
+      view = 4;
+    } else if (goal = 'carGoal') {
+      view = 5;
+    } else if (goal = 'retirementGoal') {
+      view = 6;
+    }
+    this.setState({
+      view: view,
+    });
+  }
+
   render() {
     return (
       <div>
         <h1>Feather In Your Cap</h1>
         <Salary pay={this.state.pay} changePay={this.changePay} view={this.state.views[this.state.view]} submit={this.changeView}/>
         <Bills bills={this.state.bills} view={this.state.views[this.state.view]} submit={this.changeView} setBill={this.addBill} totalBills={this.totalBills}/>
-        <Goals toSpend={this.state.toSpend} view={this.state.views[this.state.view]}/>
+        <Goals toSpend={this.state.toSpend} view={this.state.views[this.state.view]} setGoal={this.setGoal}/>
+        <Travel view={this.state.views[this.state.view]}/>
+        <House view={this.state.views[this.state.view]}/>
+        <Car view={this.state.views[this.state.view]}/>
+        <Retirement view={this.state.views[this.state.view]}/>
       </div>
     );
   }

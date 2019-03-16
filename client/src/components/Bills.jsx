@@ -2,8 +2,6 @@ import React from 'react';
 import Bill from './Bill.jsx';
 
 const Bills = (props) => {
-  console.log(props.bills);
-
   const disableButton = () => {
     for (var bill in props.bills) {
       if (props.bills[bill] === undefined) {
