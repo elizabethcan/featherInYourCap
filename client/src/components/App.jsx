@@ -28,8 +28,9 @@ class App extends React.Component {
   }
 
   changePay(event) {
+    var pay = parseInt(event.target.value) || undefined;
     this.setState({
-      [event.target.id]: parseInt(event.target.value),
+      pay: pay,
     });
   }
 
@@ -53,7 +54,9 @@ class App extends React.Component {
     event.preventDefault();
     var totalSpent = 0;
     for (var bill in this.state.bills) {
-      totalSpent += this.state.bills[bill];
+      if (this.state.bills[bill] !== undefined) {
+        totalSpent += this.state.bills[bill];
+      }
     }
     var toSpend = this.state.pay - totalSpent;
     this.setState({
