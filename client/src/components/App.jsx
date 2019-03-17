@@ -13,6 +13,7 @@ class App extends React.Component {
     this.addBill = this.addBill.bind(this);
     this.totalBills = this.totalBills.bind(this);
     this.setGoal = this.setGoal.bind(this);
+    this.createTrip = this.createTrip.bind(this);
     this.state = {
       pay: undefined,
       bills: {
@@ -25,9 +26,14 @@ class App extends React.Component {
         Other: undefined
       },
       toSpend: 0,
-      views: ['salary', 'bills', 'goals', 'travelGoal', 'houseGoal', 'carGoal', 'retirementGoal'],
+      views: ['salary', 'bills', 'goals', 'travelGoal'],
       view: 0,
-      monthsToGoal: undefined,
+      goal: {
+        location: undefined,
+        monthsToGoal: undefined,
+        budget: undefined,
+        days: undefined,
+      }    
     }
   }
 
@@ -97,6 +103,14 @@ class App extends React.Component {
     });
   }
 
+  createTrip(event) {
+    event.preventDefault();
+    // send a request to db with goal location
+      // use budget corresponding to budget in state and multiply by number of days of trip
+        // divide total cost by months until trip to get monthly savings rate for trip
+
+  }
+
   render() {
     return (
       <div>
@@ -105,7 +119,7 @@ class App extends React.Component {
           <Salary pay={this.state.pay} changePay={this.changeState} submit={this.moveForward} view={this.state.views[this.state.view]}/>
           <Bills bills={this.state.bills} view={this.state.views[this.state.view]} back={this.moveBackward} submit={this.moveForward} setBill={this.addBill} totalBills={this.totalBills}/>
           <Goals toSpend={this.state.toSpend} view={this.state.views[this.state.view]} back={this.moveBackward} setGoal={this.setGoal}/>
-          <Travel view={this.state.views[this.state.view]} months={this.state.monthsToGoal} setMonths={this.changeState}/>
+          <Travel view={this.state.views[this.state.view]} goal={this.state.goal} setMonths={this.changeState}/>
         </div>
       </div>
     );
