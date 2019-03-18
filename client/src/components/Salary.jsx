@@ -10,12 +10,7 @@ const Salary = (props) => {
       </div>
     )
   } else {
-    return (
-      <div id="salary">
-        <div>You Have ${props.pay} to budget!</div>
-        <button id="showPay" onClick={props.submit}>Edit Salary</button>
-      </div>
-    )
+    return null;
   }
 };
 

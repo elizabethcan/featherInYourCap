@@ -12,13 +12,12 @@ const Bills = (props) => {
     }
   }
 
-  if (props.view === 'bills') {
+  if (props.show === true) {
     return (
       <div id="bills">
         <div>What are your monthly recurring bills?</div>
         <Bill bills={props.bills} setBill={props.setBill}/>
         <div>
-          <button onClick={props.back}>Back</button>
           <button type="submit" disabled={disableButton()} onClick={props.totalBills}>Submit</button>
         </div>
       </div>

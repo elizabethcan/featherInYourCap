@@ -1,23 +1,21 @@
 import React from 'react';
 import axios from 'axios';
-import headers from '../../../axios.config.js';
+import config from '../../../axios.config.js';
 import Salary from './Salary.jsx';
 import Bills from './Bills.jsx';
-import Goals from './Goals.jsx';
 import Travel from './Travel.jsx';
+import ToSpend from './ToSpend.jsx';
+import countries from '../../../database/dummyData.js';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    // this.getCountries = this.getCountries.bind(this);
+    this.getCountries = this.getCountries.bind(this);
     this.changeState = this.changeState.bind(this);
-    this.toggleShow = this.toggleShow.bind(this);
+    this.submitPay = this.submitPay.bind(this);
     this.changeView = this.changeView.bind(this);
-    this.moveForward = this.moveForward.bind(this);
-    this.moveBackward = this.moveBackward.bind(this);
     this.addBill = this.addBill.bind(this);
     this.totalBills = this.totalBills.bind(this);
-    this.setGoal = this.setGoal.bind(this);
     this.state = {
       pay: '',
       showPay: false,
@@ -30,6 +28,7 @@ class App extends React.Component {
         Fuel: '',
         Other: ''
       },
+      showBudget: false,
       toSpend: '',
       view: 'salary',
       goal: {
@@ -38,48 +37,32 @@ class App extends React.Component {
         budget: '',
         days: '',
       },
+      showGoals: false,
       countries: []  
     }
   }
 
   componentDidMount() {
-    // this.getCountries();
+    this.setState({
+      countries: countries
+    });
   }
 
-  // getCountries() {
-  //   axios.get(
-  //     'https://www.budgetyourtrip.com/api/v3/countries', 
-  //     {headers: {
-  //       'X-API-KEY': 'ELIZABETHCANNON230'
-  //     }})
-  //     .then((res) => {
-  //       console.log(res);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     })
-  // }
+  getCountries() {
+    // axios.get('https://www.budgetyourtrip.com/api/v3/countries', config.config)
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   })
+
+  }
 
   changeState(event) {
     var value = parseInt(event.target.value) || undefined;
     this.setState({
       [event.target.name]: value,
-    });
-  }
-
-  moveForward(event) {
-    event.preventDefault();
-    let view = this.state.view + 1;
-    this.setState({
-      view: view
-    });
-  }
-
-  moveBackward(event) {
-    event.preventDefault();
-    let view = this.state.view - 1;
-    this.setState({
-      view: view
     });
   }
 
@@ -102,24 +85,8 @@ class App extends React.Component {
     var toSpend = this.state.pay - totalSpent;
     this.setState({
       toSpend: toSpend,
-    });
-    this.moveForward(event);
-  }
-
-  setGoal(event) {
-    var goal = event.target.id;
-    var view = this.state.view;
-    if (goal === 'travelGoal') {
-      view = 3;
-    } else if (goal === 'houseGoal') {
-      view = 4;
-    } else if (goal === 'carGoal') {
-      view = 5;
-    } else if (goal === 'retirementGoal') {
-      view = 6;
-    }
-    this.setState({
-      view: view,
+      showBudget: !this.state.showBudget,
+      showGoals: !this.state.showGoals
     });
   }
 
@@ -130,9 +97,12 @@ class App extends React.Component {
     })
   }
 
-  toggleShow(event) {
+  submitPay(event) {
+    event.preventDefault();
     this.setState({
-      [event.target.id]: !this.state[event.target.id],
+      showPay: !this.state.showPay,
+      showBudget: !this.showBudget,
+      toSpend: this.state.pay
     })
   }
 
@@ -141,15 +111,10 @@ class App extends React.Component {
       <div>
         <h1>Feather In Your Cap</h1>
         <div>
-          <div>
-            <button id="salary" onClick={this.changeView}>Salary</button>
-            <button id="bills" onClick={this.changeView}>Budget</button>
-            <button id="goals" onClick={this.changeView}>Goals</button>
-          </div>
-          <Salary pay={this.state.pay} changePay={this.changeState} submit={this.toggleShow} show={this.state.showPay}/>
-          <Bills bills={this.state.bills} view={this.state.view} back={this.moveBackward} submit={this.moveForward} setBill={this.addBill} totalBills={this.totalBills}/>
-          <Goals toSpend={this.state.toSpend} view={this.state.view} back={this.moveBackward} setGoal={this.setGoal}/>
-          <Travel view={this.state.view} goal={this.state.goal} setMonths={this.changeState}/>
+          <ToSpend toSpend={this.state.toSpend}/>
+          <Salary pay={this.state.pay} changePay={this.changeState} submit={this.submitPay} show={this.state.showPay}/>
+          <Bills show={this.state.showBudget} bills={this.state.bills} setBill={this.addBill} totalBills={this.totalBills}/>
+          <Travel show={this.state.showGoals} countries={this.state.countries} goal={this.state.goal} setMonths={this.changeState}/>
         </div>
       </div>
     );

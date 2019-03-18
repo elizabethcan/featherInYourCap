@@ -1,18 +1,12 @@
 import React from 'react';
+import Country from './Country.jsx';
 
 const Travel = (props) => {
-  if (props.view === 'travelGoal') {
+  if (props.show === true) {
     return (
       <div>
         <div>Where would you like to travel?</div>
-        <select>
-          <option>Bali(Indonesia)</option>
-          <option>Costa Rica</option>
-          <option>France</option>
-          <option>Japan</option>
-          <option>Spain</option>
-          <option>Thailand</option>
-        </select>
+        <Country countries={props.countries}/>
         <div>How many months until your desired trip date?</div>
           <input name="monthsToGoal" value={props.goal.months} onChange={props.setMonths}></input>
         <div>What type of budget would you want?</div>
