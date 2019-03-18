@@ -1,50 +1,32 @@
 module.exports = [
   {
+    id: 0,
     name: 'Bali(Indonesia)',
-    budget: {
-      'low': 22,
-      'mid': 62,
-      'high': 189
-    }
+    budget: [22,62,189]
   },
   {
+    id: 1,
     name: 'Japan',
-    budget: {
-      'low': 46,
-      'mid': 116,
-      'high': 287
-    }
+    budget: [46,116,287]
   },
   {
+    id: 2,
     name: 'Costa Rica',
-    budget: {
-      'low': 27,
-      'mid': 68,
-      'high': 177
-    }
+    budget: [27,68,177]
   },
   {
+    id: 3,
     name: 'Thailand',
-    budget: {
-      'low': 25,
-      'mid': 67,
-      'high': 197
-    }
+    budget: [25,67,197]
   },
   {
+    id: 4,
     name: 'France',
-    budget: {
-      'low': 60,
-      'mid': 164,
-      'high': 488
-    }
+    budget: [60,164,488]
   },
   {
+    id: 5,
     name: 'Spain',
-    budget: {
-      'low': 47,
-      'mid': 125,
-      'high': 338
-    }
+    budget: [47,125,338]
   },
 ]

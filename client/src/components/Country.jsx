@@ -2,9 +2,9 @@ import React from 'react';
 
 const Country = (props) => {
   return (
-    <select>
+    <select name="location" onChange={props.changeState}>
       {props.countries.map((country, index) => {
-        return <option key={index}>{country.name}</option>
+        return <option value={country.id} key={index}>{country.name}</option>
       })}
     </select>
   )

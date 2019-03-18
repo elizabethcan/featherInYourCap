@@ -6,15 +6,15 @@ import Bills from './Bills.jsx';
 import Travel from './Travel.jsx';
 import ToSpend from './ToSpend.jsx';
 import countries from '../../../database/dummyData.js';
+import Plan from './Plan.jsx';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.getCountries = this.getCountries.bind(this);
+    this.addBill = this.addBill.bind(this);
+    this.calculatePlan = this.calculatePlan.bind(this);
     this.changeState = this.changeState.bind(this);
     this.submitPay = this.submitPay.bind(this);
-    this.changeView = this.changeView.bind(this);
-    this.addBill = this.addBill.bind(this);
     this.totalBills = this.totalBills.bind(this);
     this.state = {
       pay: '',
@@ -30,33 +30,41 @@ class App extends React.Component {
       },
       showBudget: false,
       toSpend: '',
-      view: 'salary',
-      goal: {
-        location: '',
-        monthsToGoal: '',
-        budget: '',
-        days: '',
-      },
+      location: 0,
+      monthsToGoal: '',
+      budget: 0,
+      days: '',
+      tripDetails: {},
       showGoals: false,
-      countries: []  
+      countries: countries,
+      showPlan: false,
     }
   }
 
-  componentDidMount() {
+  addBill(event) {
+    var bills = this.state.bills;
+    bills[event.target.id] = parseInt(event.target.value) || undefined;
     this.setState({
-      countries: countries
-    });
+      bills: bills,
+    })
   }
-
-  getCountries() {
-    // axios.get('https://www.budgetyourtrip.com/api/v3/countries', config.config)
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   })
-
+  
+  calculatePlan(event) {
+    event.preventDefault();
+    var dailyCost = this.state.countries[this.state.location].budget[this.state.budget];
+    var totalCost = this.state.days * dailyCost;
+    var toSave = totalCost/this.state.monthsToGoal;
+    this.setState({
+      tripDetails: {
+        dailyCost: dailyCost,
+        totalCost: totalCost,
+        toSave: toSave
+      },
+      toSpend: this.state.toSpend - toSave,
+      showGoals: !this.state.showGoals,
+      showPlan: !this.state.showPlan
+    });
+    console.log(this.state.tripDetails)
   }
 
   changeState(event) {
@@ -66,11 +74,12 @@ class App extends React.Component {
     });
   }
 
-  addBill(event) {
-    var bills = this.state.bills;
-    bills[event.target.id] = parseInt(event.target.value) || undefined;
+  submitPay(event) {
+    event.preventDefault();
     this.setState({
-      bills: bills,
+      showPay: !this.state.showPay,
+      showBudget: !this.showBudget,
+      toSpend: this.state.pay
     })
   }
 
@@ -90,31 +99,16 @@ class App extends React.Component {
     });
   }
 
-  changeView(event) {
-    event.preventDefault();
-    this.setState({
-      view: event.target.id
-    })
-  }
-
-  submitPay(event) {
-    event.preventDefault();
-    this.setState({
-      showPay: !this.state.showPay,
-      showBudget: !this.showBudget,
-      toSpend: this.state.pay
-    })
-  }
-
   render() {
     return (
       <div>
         <h1>Feather In Your Cap</h1>
         <div>
+          <Plan show={this.state.showPlan} details={this.state.tripDetails}/>
           <ToSpend toSpend={this.state.toSpend}/>
           <Salary pay={this.state.pay} changePay={this.changeState} submit={this.submitPay} show={this.state.showPay}/>
           <Bills show={this.state.showBudget} bills={this.state.bills} setBill={this.addBill} totalBills={this.totalBills}/>
-          <Travel show={this.state.showGoals} countries={this.state.countries} goal={this.state.goal} setMonths={this.changeState}/>
+          <Travel show={this.state.showGoals} countries={this.state.countries} changeState={this.changeState} days={this.state.days} months={this.state.monthsToGoal} calculate={this.calculatePlan}/>
         </div>
       </div>
     );
