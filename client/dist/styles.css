@@ -1,0 +1,17 @@
+html {
+  background: url(images/bali2.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+#header {
+  font-family: 'Merienda', cursive;
+}
+
+#app {
+  display: flex;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+}

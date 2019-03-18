@@ -7,6 +7,7 @@ import Travel from './Travel.jsx';
 import ToSpend from './ToSpend.jsx';
 import countries from '../../../database/dummyData.js';
 import Plan from './Plan.jsx';
+import Landing from './Landing.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -102,8 +103,9 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>Feather In Your Cap</h1>
+        <h1 id="header">Feather In Your Cap</h1>
         <div>
+          <Landing />
           <Plan show={this.state.showPlan} details={this.state.tripDetails}/>
           <ToSpend toSpend={this.state.toSpend}/>
           <Salary pay={this.state.pay} changePay={this.changeState} submit={this.submitPay} show={this.state.showPay}/>
