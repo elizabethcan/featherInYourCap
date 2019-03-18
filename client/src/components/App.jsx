@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios';
+import headers from '../../../axios.config.js';
 import Salary from './Salary.jsx';
 import Bills from './Bills.jsx';
 import Goals from './Goals.jsx';
@@ -7,38 +9,56 @@ import Travel from './Travel.jsx';
 class App extends React.Component {
   constructor(props) {
     super(props);
+    // this.getCountries = this.getCountries.bind(this);
     this.changeState = this.changeState.bind(this);
+    this.toggleShow = this.toggleShow.bind(this);
+    this.changeView = this.changeView.bind(this);
     this.moveForward = this.moveForward.bind(this);
     this.moveBackward = this.moveBackward.bind(this);
     this.addBill = this.addBill.bind(this);
     this.totalBills = this.totalBills.bind(this);
     this.setGoal = this.setGoal.bind(this);
-    this.createTrip = this.createTrip.bind(this);
     this.state = {
-      pay: undefined,
+      pay: '',
+      showPay: false,
       bills: {
-        Rent: undefined,
-        Utilities: undefined,
-        Car: undefined,
-        Health: undefined,
-        Groceries: undefined,
-        Fuel: undefined,
-        Other: undefined
+        Rent: '',
+        Utilities: '',
+        Car: '',
+        Health: '',
+        Groceries: '',
+        Fuel: '',
+        Other: ''
       },
-      toSpend: 0,
-      views: ['salary', 'bills', 'goals', 'travelGoal'],
-      view: 0,
+      toSpend: '',
+      view: 'salary',
       goal: {
-        location: undefined,
-        monthsToGoal: undefined,
-        budget: undefined,
-        days: undefined,
-      }    
+        location: '',
+        monthsToGoal: '',
+        budget: '',
+        days: '',
+      },
+      countries: []  
     }
   }
 
   componentDidMount() {
+    // this.getCountries();
   }
+
+  // getCountries() {
+  //   axios.get(
+  //     'https://www.budgetyourtrip.com/api/v3/countries', 
+  //     {headers: {
+  //       'X-API-KEY': 'ELIZABETHCANNON230'
+  //     }})
+  //     .then((res) => {
+  //       console.log(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     })
+  // }
 
   changeState(event) {
     var value = parseInt(event.target.value) || undefined;
@@ -103,12 +123,17 @@ class App extends React.Component {
     });
   }
 
-  createTrip(event) {
+  changeView(event) {
     event.preventDefault();
-    // send a request to db with goal location
-      // use budget corresponding to budget in state and multiply by number of days of trip
-        // divide total cost by months until trip to get monthly savings rate for trip
+    this.setState({
+      view: event.target.id
+    })
+  }
 
+  toggleShow(event) {
+    this.setState({
+      [event.target.id]: !this.state[event.target.id],
+    })
   }
 
   render() {
@@ -116,10 +141,15 @@ class App extends React.Component {
       <div>
         <h1>Feather In Your Cap</h1>
         <div>
-          <Salary pay={this.state.pay} changePay={this.changeState} submit={this.moveForward} view={this.state.views[this.state.view]}/>
-          <Bills bills={this.state.bills} view={this.state.views[this.state.view]} back={this.moveBackward} submit={this.moveForward} setBill={this.addBill} totalBills={this.totalBills}/>
-          <Goals toSpend={this.state.toSpend} view={this.state.views[this.state.view]} back={this.moveBackward} setGoal={this.setGoal}/>
-          <Travel view={this.state.views[this.state.view]} goal={this.state.goal} setMonths={this.changeState}/>
+          <div>
+            <button id="salary" onClick={this.changeView}>Salary</button>
+            <button id="bills" onClick={this.changeView}>Budget</button>
+            <button id="goals" onClick={this.changeView}>Goals</button>
+          </div>
+          <Salary pay={this.state.pay} changePay={this.changeState} submit={this.toggleShow} show={this.state.showPay}/>
+          <Bills bills={this.state.bills} view={this.state.view} back={this.moveBackward} submit={this.moveForward} setBill={this.addBill} totalBills={this.totalBills}/>
+          <Goals toSpend={this.state.toSpend} view={this.state.view} back={this.moveBackward} setGoal={this.setGoal}/>
+          <Travel view={this.state.view} goal={this.state.goal} setMonths={this.changeState}/>
         </div>
       </div>
     );
