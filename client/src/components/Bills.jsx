@@ -2,24 +2,23 @@ import React from 'react';
 import Bill from './Bill.jsx';
 
 const Bills = (props) => {
-  const disableButton = () => {
-    for (var bill in props.bills) {
-      if (props.bills[bill] === undefined) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
+  // const disableButton = () => {
+  //   let disabled = true;
+  //   for (var bill in props.bills) {
+  //     if (props.bills[bill].length > 0) {
+  //       disabled = false;
+  //     }
+  //   }
+  //   return disabled;
+  // }
 
-  if (props.view === 'bills') {
+  if (props.show === true) {
     return (
-      <div id="bills">
+      <div className="container" id="bills-container">
         <div>What are your monthly recurring bills?</div>
         <Bill bills={props.bills} setBill={props.setBill}/>
         <div>
-          <button onClick={props.back}>Back</button>
-          <button type="submit" disabled={disableButton()} onClick={props.totalBills}>Submit</button>
+          <button type="submit" onClick={props.totalBills}>Submit</button>
         </div>
       </div>
     )

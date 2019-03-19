@@ -1,29 +1,23 @@
 import React from 'react';
+import Country from './Country.jsx';
 
 const Travel = (props) => {
-  if (props.view === 'travelGoal') {
+  if (props.show === true) {
     return (
-      <div>
+      <div className="container" id="travel">
         <div>Where would you like to travel?</div>
-        <select>
-          <option>Bali(Indonesia)</option>
-          <option>Costa Rica</option>
-          <option>France</option>
-          <option>Japan</option>
-          <option>Spain</option>
-          <option>Thailand</option>
-        </select>
+        <Country countries={props.countries} changeState={props.changeState}/>
         <div>How many months until your desired trip date?</div>
-          <input name="monthsToGoal" value={props.months} onChange={props.setMonths}></input>
+          <input name="monthsToGoal" value={props.months} onChange={props.changeState}></input>
         <div>What type of budget would you want?</div>
-        <select>
-          <option>Ballin' on a Budget</option>
-          <option>Livin' Like a King</option>
-          <option>Somewhere in Between</option>
+        <select name="budget" onChange={props.changeState}>
+          <option value="0">Ballin' on a Budget</option>
+          <option value="2">Livin' Like a King</option>
+          <option value="1">Somewhere in Between</option>
         </select>
         <div>How many days will your trip be?</div>
-        <input></input>
-        <button>Let's Do It!</button>
+        <input name="days" value={props.days} onChange={props.changeState}></input>
+        <button onClick={props.calculate}>Let's Do It!</button>
       </div>
     )
   } else {

@@ -1,45 +1,80 @@
 import React from 'react';
+import axios from 'axios';
+import config from '../../../axios.config.js';
 import Salary from './Salary.jsx';
 import Bills from './Bills.jsx';
-import Goals from './Goals.jsx';
 import Travel from './Travel.jsx';
-import House from './House.jsx';
-import Car from './Car.jsx';
-import Retirement from './Retirement.jsx';
+import ToSpend from './ToSpend.jsx';
+import countries from '../../../database/dummyData.js';
+import Plan from './Plan.jsx';
+import Landing from './Landing.jsx';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.changeState = this.changeState.bind(this);
-    this.changeSavings = this.changeSavings.bind(this);
-    this.moveForward = this.moveForward.bind(this);
-    this.moveBackward = this.moveBackward.bind(this);
     this.addBill = this.addBill.bind(this);
+    this.calculatePlan = this.calculatePlan.bind(this);
+    this.changeState = this.changeState.bind(this);
+    this.submitPay = this.submitPay.bind(this);
     this.totalBills = this.totalBills.bind(this);
-    this.setGoal = this.setGoal.bind(this);
-    this.showPlan = this.showPlan.bind(this);
     this.state = {
-      pay: undefined,
+      pay: '',
+      showPay: false,
       bills: {
-        Rent: undefined,
-        Utilities: undefined,
-        Car: undefined,
-        Health: undefined,
-        Groceries: undefined,
-        Fuel: undefined,
-        Other: undefined
+        Rent: '',
+        Utilities: '',
+        Car: '',
+        Health: '',
+        Groceries: '',
+        Fuel: '',
+        Other: ''
       },
-      toSpend: 0,
-      currentSavings: undefined,
-      views: ['salary', 'bills', 'goals', 'travelGoal', 'houseGoal', 'carGoal', 'retirementGoal'],
-      view: 0,
-      goal: undefined,
-      monthsToGoal: undefined,
-      displayPlan: false,
+      showBudget: false,
+      toSpend: '',
+      location: 0,
+      monthsToGoal: '',
+      budget: 0,
+      days: '',
+      tripDetails: {},
+      showGoals: false,
+      countries: countries,
+      showPlan: false,
     }
   }
 
   componentDidMount() {
+    axios.get('https://cors-anywhere.herokuapp.com/https://www.budgetyourtrip.com/api/v3/countries')
+      .then((res) => {
+        this.setState({
+          byc: res.data
+        })
+      })
+  }
+
+  addBill(event) {
+    var bills = this.state.bills;
+    bills[event.target.id] = parseInt(event.target.value) || undefined;
+    this.setState({
+      bills: bills,
+    })
+  }
+  
+  calculatePlan(event) {
+    event.preventDefault();
+    var dailyCost = this.state.countries[this.state.location].budget[this.state.budget];
+    var totalCost = this.state.days * dailyCost;
+    var toSave = totalCost/this.state.monthsToGoal;
+    this.setState({
+      tripDetails: {
+        dailyCost: dailyCost,
+        totalCost: totalCost,
+        toSave: toSave
+      },
+      toSpend: this.state.toSpend - toSave,
+      showGoals: !this.state.showGoals,
+      showPlan: !this.state.showPlan
+    });
+    console.log(this.state.tripDetails)
   }
 
   changeState(event) {
@@ -49,36 +84,12 @@ class App extends React.Component {
     });
   }
 
-  changeSavings(event) {
-    console.log(`inside currentSavings`)
-    var currentSavings = parseInt(event.target.value) || undefined;
-    console.log(currentSavings)
-    this.setState({
-      currentSavings: currentSavings,
-    });
-  }
-
-  moveForward(event) {
+  submitPay(event) {
     event.preventDefault();
-    let view = this.state.view + 1;
     this.setState({
-      view: view
-    });
-  }
-
-  moveBackward(event) {
-    event.preventDefault();
-    let view = this.state.view - 1;
-    this.setState({
-      view: view
-    });
-  }
-
-  addBill(event) {
-    var bills = this.state.bills;
-    bills[event.target.id] = parseInt(event.target.value) || undefined;
-    this.setState({
-      bills: bills,
+      showPay: !this.state.showPay,
+      showBudget: !this.showBudget,
+      toSpend: this.state.pay
     })
   }
 
@@ -93,46 +104,22 @@ class App extends React.Component {
     var toSpend = this.state.pay - totalSpent;
     this.setState({
       toSpend: toSpend,
+      showBudget: !this.state.showBudget,
+      showGoals: !this.state.showGoals
     });
-    this.moveForward(event);
-  }
-
-  setGoal(event) {
-    var goal = event.target.id;
-    var view = this.state.view;
-    if (goal === 'travelGoal') {
-      view = 3;
-    } else if (goal === 'houseGoal') {
-      view = 4;
-    } else if (goal === 'carGoal') {
-      view = 5;
-    } else if (goal === 'retirementGoal') {
-      view = 6;
-    }
-    this.setState({
-      view: view,
-    });
-  }
-
-  showPlan(event) {
-    event.preventDefault();
-    this.setState({
-      displayPlan: true,
-    })
   }
 
   render() {
     return (
-      <div>
-        <h1>Feather In Your Cap</h1>
+      <div id="container">
+        <h1 id="header">Feather In Your Cap</h1>
         <div>
-          <Salary pay={this.state.pay} changePay={this.changeState} view={this.state.views[this.state.view]} submit={this.moveForward}/>
-          <Bills bills={this.state.bills} view={this.state.views[this.state.view]} back={this.moveBackward} submit={this.moveForward} setBill={this.addBill} totalBills={this.totalBills}/>
-          <Goals toSpend={this.state.toSpend} view={this.state.views[this.state.view]} back={this.moveBackward} setGoal={this.setGoal}/>
-          <Travel view={this.state.views[this.state.view]} months={this.state.monthsToGoal} setMonths={this.changeState}/>
-          <House view={this.state.views[this.state.view]}/>
-          <Car view={this.state.views[this.state.view]}/>
-          <Retirement dispalyPlan={this.state.displayPlan} currentSavings={this.state.currentSavings} changeSavings={this.changeSavings} view={this.state.views[this.state.view]} submit={this.showPlan}/>
+          <Landing />
+          <Plan show={this.state.showPlan} details={this.state.tripDetails}/>
+          <ToSpend toSpend={this.state.toSpend}/>
+          <Salary pay={this.state.pay} changePay={this.changeState} submit={this.submitPay} show={this.state.showPay}/>
+          <Bills show={this.state.showBudget} bills={this.state.bills} setBill={this.addBill} totalBills={this.totalBills}/>
+          <Travel show={this.state.showGoals} countries={this.state.countries} changeState={this.changeState} days={this.state.days} months={this.state.monthsToGoal} calculate={this.calculatePlan}/>
         </div>
       </div>
     );
