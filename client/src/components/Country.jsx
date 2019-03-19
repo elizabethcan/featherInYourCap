@@ -1,13 +1,16 @@
 import React from 'react';
 
 const Country = (props) => {
-  return (
-    <select name="location" onChange={props.changeState}>
-      {props.countries.map((country, index) => {
-        return <option value={country.id} key={index}>{country.name}</option>
-      })}
-    </select>
-  )
+  if (props.show === true) {
+    return (
+      <div>
+        <h1>{props.country.name}</h1>
+        <div></div>
+      </div>
+    )
+  } else {
+    return null;
+  }
 };
 
 export default Country;

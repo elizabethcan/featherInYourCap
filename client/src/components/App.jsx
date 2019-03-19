@@ -5,16 +5,18 @@ import Salary from './Salary.jsx';
 import Bills from './Bills.jsx';
 import Travel from './Travel.jsx';
 import ToSpend from './ToSpend.jsx';
-import countries from '../../../database/dummyData.js';
 import Plan from './Plan.jsx';
 import Landing from './Landing.jsx';
+import Country from './Country.jsx';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.addBill = this.addBill.bind(this);
     this.calculatePlan = this.calculatePlan.bind(this);
-    this.changeState = this.changeState.bind(this);
+    this.changeNumber = this.changeNumber.bind(this);
+    this.changeString = this.changeString.bind(this);
+    this.setCountry = this.setCountry.bind(this);
     this.submitPay = this.submitPay.bind(this);
     this.totalBills = this.totalBills.bind(this);
     this.state = {
@@ -33,11 +35,11 @@ class App extends React.Component {
       toSpend: '',
       location: 0,
       monthsToGoal: '',
-      budget: 0,
+      budget: 'value_budget',
       days: '',
       tripDetails: {},
       showGoals: false,
-      countries: countries,
+      countries: [],
       showPlan: false,
     }
   }
@@ -46,7 +48,7 @@ class App extends React.Component {
     axios.get('https://cors-anywhere.herokuapp.com/https://www.budgetyourtrip.com/api/v3/countries')
       .then((res) => {
         this.setState({
-          byc: res.data
+          countries: res.data.data
         })
       })
   }
@@ -74,14 +76,30 @@ class App extends React.Component {
       showGoals: !this.state.showGoals,
       showPlan: !this.state.showPlan
     });
-    console.log(this.state.tripDetails)
   }
 
-  changeState(event) {
+  changeNumber(event) {
     var value = parseInt(event.target.value) || undefined;
     this.setState({
       [event.target.name]: value,
     });
+  }
+
+  changeString(event) {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  }
+
+  setCountry(event) {
+    this.changeString(event);
+    var code = this.state.countries[this.state.location].country_code;
+    var url = `https://cors-anywhere.herokuapp.com/https://www.budgetyourtrip.com/api/v3/costs/countryinfo/${code}`;
+    console.log(url);
+    axios.get(url)
+      .then((res) => {
+        console.log(res);
+      })
   }
 
   submitPay(event) {
@@ -111,15 +129,20 @@ class App extends React.Component {
 
   render() {
     return (
-      <div id="container">
-        <h1 id="header">Feather In Your Cap</h1>
-        <div>
-          <Landing />
-          <Plan show={this.state.showPlan} details={this.state.tripDetails}/>
-          <ToSpend toSpend={this.state.toSpend}/>
-          <Salary pay={this.state.pay} changePay={this.changeState} submit={this.submitPay} show={this.state.showPay}/>
-          <Bills show={this.state.showBudget} bills={this.state.bills} setBill={this.addBill} totalBills={this.totalBills}/>
-          <Travel show={this.state.showGoals} countries={this.state.countries} changeState={this.changeState} days={this.state.days} months={this.state.monthsToGoal} calculate={this.calculatePlan}/>
+      <div id="main-container">
+        <div id="left-container">
+          <Country show={this.state.showGoals} country={this.state.countries[this.state.location]}/>
+        </div>
+        <div id="right-container">
+          <h1 id="header">Feather In Your Cap</h1>
+          <div>
+            <Landing />
+            <Plan show={this.state.showPlan} details={this.state.tripDetails}/>
+            <ToSpend toSpend={this.state.toSpend}/>
+            <Salary pay={this.state.pay} changePay={this.changeNumber} submit={this.submitPay} show={this.state.showPay}/>
+            <Bills show={this.state.showBudget} bills={this.state.bills} setBill={this.addBill} totalBills={this.totalBills}/>
+            <Travel show={this.state.showGoals} countries={this.state.countries} setCountry={this.setCountry} changeString={this.changeString} changeNumber={this.changeNumber} days={this.state.days} months={this.state.monthsToGoal} calculate={this.calculatePlan}/>
+          </div>
         </div>
       </div>
     );
