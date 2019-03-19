@@ -102,7 +102,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <div id="container">
         <h1 id="header">Feather In Your Cap</h1>
         <div>
           <Landing />

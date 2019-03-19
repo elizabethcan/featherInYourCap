@@ -4,7 +4,7 @@ import Country from './Country.jsx';
 const Travel = (props) => {
   if (props.show === true) {
     return (
-      <div>
+      <div id="travel-container">
         <div>Where would you like to travel?</div>
         <Country countries={props.countries} changeState={props.changeState}/>
         <div>How many months until your desired trip date?</div>

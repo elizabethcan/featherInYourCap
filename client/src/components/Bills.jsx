@@ -14,7 +14,7 @@ const Bills = (props) => {
 
   if (props.show === true) {
     return (
-      <div id="bills">
+      <div id="bills-container">
         <div>What are your monthly recurring bills?</div>
         <Bill bills={props.bills} setBill={props.setBill}/>
         <div>
