@@ -17,6 +17,7 @@ class App extends React.Component {
     this.calculatePlan = this.calculatePlan.bind(this);
     this.changeNumber = this.changeNumber.bind(this);
     this.changeString = this.changeString.bind(this);
+    this.getConversionRate = this.getConversionRate.bind(this);
     this.setCountry = this.setCountry.bind(this);
     this.submitPay = this.submitPay.bind(this);
     this.totalBills = this.totalBills.bind(this);
@@ -83,35 +84,33 @@ class App extends React.Component {
     var dailyCost = 0;
     var averageCost = 0;
     var costs = this.state.countryInfo.costs;
+    console.log(costs);
     for (var i = 0; i < costs.length; i++) {
       dailyCost += parseInt(costs[i][this.state.budget]);
     }
     averageCost = dailyCost/costs.length;
+    console.log(averageCost)
     callback(averageCost);
   }
 
   calculatePlan(event) {
     event.preventDefault();
     this.calculateDailyCost((cost) => {
-      console.log(cost);
-      axios.get(`https://cors-anywhere.herokuapp.com/https://www.budgetyourtrip.com/api/v3/currencies/convert/${this.state.countryInfo.info.country_code}/USD/${cost}`)
-        .then((res) => {
-          console.log(`this will cost ${res.data.data.newAmount} in USD per day`)
-          var perDay = res.data.data.newAmount.toFixed(2);
-          var total = perDay * this.state.days.toFixed(2);
-          var save = (total/this.state.monthsToGoal).toFixed(2);
-          this.setState({
-            tripDetails: {
-              dailyCost: perDay,
-              totalCost: total,
-              toSave: save
-            },
-            toSpend: this.state.toSpend - save,
-            showGoals: !this.state.showGoals,
-            showPlan: !this.state.showPlan
-          });
-        });
-    })
+      console.log(`cost: ${cost}`)
+      var perDay = (cost * this.state.conversionRate).toFixed(2);
+      var total = (perDay * this.state.days).toFixed();
+      var save = (total/this.state.monthsToGoal).toFixed(2);
+      this.setState({
+        tripDetails: {
+          dailyCost: perDay,
+          totalCost: total,
+          toSave: save
+        },
+        toSpend: this.state.toSpend - save,
+        showGoals: !this.state.showGoals,
+        showPlan: !this.state.showPlan
+      });
+    });
   }
 
   changeNumber(event) {
@@ -127,18 +126,46 @@ class App extends React.Component {
     });
   }
 
+  getConversionRate(currency) {
+    axios.get(`https://cors-anywhere.herokuapp.com/https://www.budgetyourtrip.com/api/v3/currencies/convert/${currency}/USD`)
+      .then((res) => {
+        this.setState({
+          conversionRate: parseFloat(res.data.data.rate),
+        });
+      })
+  }
+
+  setBudget(event) {
+    this.setState({
+      budget: event.target.value,
+    }, () => {
+      var costs = this.state.countryInfo.costs;
+      for (var i = 0; i < costs.length; i++) {
+        if (costs[i].category_id === 1) {
+          var accomodation = costs[i][this.state.budget]
+        }
+      }
+    });
+  }
+
   setCountry(event) {
     this.setState({
       location: parseInt(event.target.value),
     }, () => {
       var code = this.state.countries[this.state.location].country_code;
-      var url = `https://cors-anywhere.herokuapp.com/https://www.budgetyourtrip.com/api/v3/costs/countryinfo/${code}`;
-      axios.get(url)
+      axios.get(`https://cors-anywhere.herokuapp.com/https://www.budgetyourtrip.com/api/v3/costs/countryinfo/${code}`)
         .then((res) => {
           this.setState({
             countryInfo: res.data.data
-          })
+          });
+          this.getConversionRate(res.data.data.info.currency_code)
         });
+      axios.get(`https://cors-anywhere.herokuapp.com/https://www.budgetyourtrip.com/api/v3/costs/countryhighlights/${code}`)
+        .then((res) => {
+          this.setState({
+            countryHighlights: res.data.data
+          });
+        })
     });
   }
 
@@ -171,7 +198,7 @@ class App extends React.Component {
     return (
       <div id="main-container">
         <div id="left-container">
-          <Country show={this.state.showGoals} countryInfo={this.state.countryInfo}/>
+          <Country show={this.state.showGoals} countryInfo={this.state.countryInfo} countryHighlights={this.state.countryHighlights} conversionRate={this.state.conversionRate}/>
         </div>
         <div id="right-container">
           <h1 id="header">Feather In Your Cap</h1>
