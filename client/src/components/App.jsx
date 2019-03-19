@@ -13,6 +13,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.addBill = this.addBill.bind(this);
+    this.calculateDailyCost = this.calculateDailyCost.bind(this);
     this.calculatePlan = this.calculatePlan.bind(this);
     this.changeNumber = this.changeNumber.bind(this);
     this.changeString = this.changeString.bind(this);
@@ -48,7 +49,7 @@ class App extends React.Component {
     axios.get('https://cors-anywhere.herokuapp.com/https://www.budgetyourtrip.com/api/v3/countries')
       .then((res) => {
         this.setState({
-          countries: res.data.data
+          countries: res.data.data.slice(1)
         })
       })
   }
@@ -61,21 +62,56 @@ class App extends React.Component {
     })
   }
   
+  // calculatePlan(event) {
+  //   event.preventDefault();
+  //   var dailyCost = this.state.countries[this.state.location].budget[this.state.budget];
+  //   var totalCost = this.state.days * dailyCost;
+  //   var toSave = totalCost/this.state.monthsToGoal;
+  //   this.setState({
+  //     tripDetails: {
+  //       dailyCost: dailyCost,
+  //       totalCost: totalCost,
+  //       toSave: toSave
+  //     },
+  //     toSpend: this.state.toSpend - toSave,
+  //     showGoals: !this.state.showGoals,
+  //     showPlan: !this.state.showPlan
+  //   });
+  // }
+
+  calculateDailyCost(callback) {
+    var dailyCost = 0;
+    var averageCost = 0;
+    var costs = this.state.countryInfo.costs;
+    for (var i = 0; i < costs.length; i++) {
+      dailyCost += parseInt(costs[i][this.state.budget]);
+    }
+    averageCost = dailyCost/costs.length;
+    callback(averageCost);
+  }
+
   calculatePlan(event) {
     event.preventDefault();
-    var dailyCost = this.state.countries[this.state.location].budget[this.state.budget];
-    var totalCost = this.state.days * dailyCost;
-    var toSave = totalCost/this.state.monthsToGoal;
-    this.setState({
-      tripDetails: {
-        dailyCost: dailyCost,
-        totalCost: totalCost,
-        toSave: toSave
-      },
-      toSpend: this.state.toSpend - toSave,
-      showGoals: !this.state.showGoals,
-      showPlan: !this.state.showPlan
-    });
+    this.calculateDailyCost((cost) => {
+      console.log(cost);
+      axios.get(`https://cors-anywhere.herokuapp.com/https://www.budgetyourtrip.com/api/v3/currencies/convert/${this.state.countryInfo.info.country_code}/USD/${cost}`)
+        .then((res) => {
+          console.log(`this will cost ${res.data.data.newAmount} in USD per day`)
+          var perDay = res.data.data.newAmount.toFixed(2);
+          var total = perDay * this.state.days.toFixed(2);
+          var save = (total/this.state.monthsToGoal).toFixed(2);
+          this.setState({
+            tripDetails: {
+              dailyCost: perDay,
+              totalCost: total,
+              toSave: save
+            },
+            toSpend: this.state.toSpend - save,
+            showGoals: !this.state.showGoals,
+            showPlan: !this.state.showPlan
+          });
+        });
+    })
   }
 
   changeNumber(event) {
@@ -99,7 +135,6 @@ class App extends React.Component {
       var url = `https://cors-anywhere.herokuapp.com/https://www.budgetyourtrip.com/api/v3/costs/countryinfo/${code}`;
       axios.get(url)
         .then((res) => {
-          console.log(res.data.data);
           this.setState({
             countryInfo: res.data.data
           })
@@ -136,7 +171,7 @@ class App extends React.Component {
     return (
       <div id="main-container">
         <div id="left-container">
-          <Country show={this.state.showGoals} country={this.state.countries[this.state.location]}/>
+          <Country show={this.state.showGoals} countryInfo={this.state.countryInfo}/>
         </div>
         <div id="right-container">
           <h1 id="header">Feather In Your Cap</h1>
