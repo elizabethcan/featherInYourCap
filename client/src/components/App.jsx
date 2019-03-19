@@ -62,23 +62,6 @@ class App extends React.Component {
       bills: bills,
     })
   }
-  
-  // calculatePlan(event) {
-  //   event.preventDefault();
-  //   var dailyCost = this.state.countries[this.state.location].budget[this.state.budget];
-  //   var totalCost = this.state.days * dailyCost;
-  //   var toSave = totalCost/this.state.monthsToGoal;
-  //   this.setState({
-  //     tripDetails: {
-  //       dailyCost: dailyCost,
-  //       totalCost: totalCost,
-  //       toSave: toSave
-  //     },
-  //     toSpend: this.state.toSpend - toSave,
-  //     showGoals: !this.state.showGoals,
-  //     showPlan: !this.state.showPlan
-  //   });
-  // }
 
   calculateDailyCost(callback) {
     var dailyCost = 0;
@@ -96,7 +79,6 @@ class App extends React.Component {
   calculatePlan(event) {
     event.preventDefault();
     this.calculateDailyCost((cost) => {
-      console.log(`cost: ${cost}`)
       var perDay = (cost * this.state.conversionRate).toFixed(2);
       var total = (perDay * this.state.days).toFixed();
       var save = (total/this.state.monthsToGoal).toFixed(2);
@@ -204,7 +186,7 @@ class App extends React.Component {
           <h1 id="header">Feather In Your Cap</h1>
           <div>
             <Landing />
-            <Plan show={this.state.showPlan} details={this.state.tripDetails}/>
+            <Plan show={this.state.showPlan} details={this.state.tripDetails} country={this.state.countryInfo}/>
             <ToSpend toSpend={this.state.toSpend}/>
             <Salary pay={this.state.pay} changePay={this.changeNumber} submit={this.submitPay} show={this.state.showPay}/>
             <Bills show={this.state.showBudget} bills={this.state.bills} setBill={this.addBill} totalBills={this.totalBills}/>
