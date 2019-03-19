@@ -42,6 +42,15 @@ class App extends React.Component {
     }
   }
 
+  componentDidMount() {
+    axios.get('https://cors-anywhere.herokuapp.com/https://www.budgetyourtrip.com/api/v3/countries')
+      .then((res) => {
+        this.setState({
+          byc: res.data
+        })
+      })
+  }
+
   addBill(event) {
     var bills = this.state.bills;
     bills[event.target.id] = parseInt(event.target.value) || undefined;

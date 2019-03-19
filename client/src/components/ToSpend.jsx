@@ -3,7 +3,7 @@ import React from 'react';
 const ToSpend = (props) => {
   if(props.toSpend !== '') {
     return (
-      <div id="spend-container">
+      <div className="container" id="spend">
         <div>You have ${props.toSpend} of your monthly pay left to budget!</div>
       </div>
     )
