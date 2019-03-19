@@ -64,15 +64,13 @@ class App extends React.Component {
   }
 
   calculateDailyCost(callback) {
-    var dailyCost = 0;
     var averageCost = 0;
     var costs = this.state.countryInfo.costs;
-    console.log(costs);
     for (var i = 0; i < costs.length; i++) {
-      dailyCost += parseInt(costs[i][this.state.budget]);
+      if (costs[i].category_id === "0") {
+        averageCost = costs[i][this.state.budget]
+      }
     }
-    averageCost = dailyCost/costs.length;
-    console.log(averageCost)
     callback(averageCost);
   }
 
