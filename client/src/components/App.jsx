@@ -92,15 +92,19 @@ class App extends React.Component {
   }
 
   setCountry(event) {
-    this.changeString(event)
-    var code = this.state.countries[this.state.location].country_code;
-    console.log(code);
-    var url = `https://cors-anywhere.herokuapp.com/https://www.budgetyourtrip.com/api/v3/costs/countryinfo/${code}`;
-    console.log(url);
-    axios.get(url)
-      .then((res) => {
-        console.log(`done`);
-      });
+    this.setState({
+      location: parseInt(event.target.value),
+    }, () => {
+      var code = this.state.countries[this.state.location].country_code;
+      var url = `https://cors-anywhere.herokuapp.com/https://www.budgetyourtrip.com/api/v3/costs/countryinfo/${code}`;
+      axios.get(url)
+        .then((res) => {
+          console.log(res.data.data);
+          this.setState({
+            countryInfo: res.data.data
+          })
+        });
+    });
   }
 
   submitPay(event) {
