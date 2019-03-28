@@ -5,7 +5,7 @@ const Highlights = (props) => {
     if (props.countryHighlights.length > 0) {
       return (
         <div id="highlights-container"> 
-          <div id="country-highlights">Country Highlights:</div>
+          <div id="country-highlights">Average Costs:</div>
           {props.countryHighlights.map((item, index) => {
             return (
               <div key={index} id="highlight">
@@ -17,7 +17,7 @@ const Highlights = (props) => {
         </div>
       )
     } else {
-      return <div>No Highlights Available For This Country</div>;
+      return <div>No Averages Available For This Country</div>;
     }
   } else {
     return null;

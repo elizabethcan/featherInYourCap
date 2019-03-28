@@ -48,7 +48,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('https://cors-anywhere.herokuapp.com/https://www.budgetyourtrip.com/api/v3/countries')
+    axios.get('/countries')
       .then((res) => {
         this.setState({
           countries: res.data.data.slice(1)
