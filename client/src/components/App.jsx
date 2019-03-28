@@ -13,6 +13,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.addBill = this.addBill.bind(this);
+    this.back = this.back.bind(this);
     this.calculateDailyCost = this.calculateDailyCost.bind(this);
     this.calculatePlan = this.calculatePlan.bind(this);
     this.changeNumber = this.changeNumber.bind(this);
@@ -60,6 +61,14 @@ class App extends React.Component {
     bills[event.target.id] = parseInt(event.target.value) || undefined;
     this.setState({
       bills: bills,
+    })
+  }
+
+  back(event) {
+    event.preventDefault();
+    this.setState({
+      showGoals: !this.state.showGoals,
+      showPlan: !this.state.showPlan
     })
   }
 
@@ -184,7 +193,7 @@ class App extends React.Component {
           <h1 id="header">Feather In Your Cap</h1>
           <div>
             <Landing />
-            <Plan show={this.state.showPlan} details={this.state.tripDetails} country={this.state.countryInfo}/>
+            <Plan show={this.state.showPlan} details={this.state.tripDetails} country={this.state.countryInfo}back={this.back}/>
             <ToSpend toSpend={this.state.toSpend}/>
             <Salary pay={this.state.pay} changePay={this.changeNumber} submit={this.submitPay} show={this.state.showPay}/>
             <Bills show={this.state.showBudget} bills={this.state.bills} setBill={this.addBill} totalBills={this.totalBills}/>
