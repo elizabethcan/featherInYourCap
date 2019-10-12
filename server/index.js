@@ -42,6 +42,6 @@ app.get('/convert', (req, res) => {
   })
 })
 
-app.listen(port, 'localhost', () => {
-  console.log(`Now listening on port ${port}`);
+app.listen(process.env.PORT || port, () => {
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
