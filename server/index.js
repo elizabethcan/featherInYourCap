@@ -8,6 +8,7 @@ const country = require('../database/controllers/country.js');
 const port = 3000;
 
 app.use(express.static(path.resolve(__dirname, '../client/dist')));
+// app.use('/static', express.static(path.join(__dirname, 'client/dist')));
 
 
 app.get('/countries', (req, res) => {
