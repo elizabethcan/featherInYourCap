@@ -184,6 +184,8 @@ class App extends React.Component {
 
   render() {
     return (
+      <>
+      <div>THIS IS A TEST</div>
       <div id="main-container">
         <div id="left-container">
           <Country show={this.state.showGoals} countryInfo={this.state.countryInfo} countryHighlights={this.state.countryHighlights} conversionRate={this.state.conversionRate}/>
@@ -200,6 +202,7 @@ class App extends React.Component {
           </div>
         </div>
       </div>
+      </>
     );
   }
 }
