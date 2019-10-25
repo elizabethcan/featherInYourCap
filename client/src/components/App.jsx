@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import config from '../../../axios.config.js';
+// import config from '../../../axios.config.js';
 import Salary from './Salary.jsx';
 import Bills from './Bills.jsx';
 import Travel from './Travel.jsx';
