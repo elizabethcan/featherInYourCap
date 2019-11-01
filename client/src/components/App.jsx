@@ -57,7 +57,7 @@ class App extends React.Component {
   }
 
   addBill(event) {
-    var bills = this.state.bills;
+    const bills = this.state.bills;
     bills[event.target.id] = parseInt(event.target.value) || undefined;
     this.setState({
       bills: bills,
@@ -73,8 +73,8 @@ class App extends React.Component {
   }
 
   calculateDailyCost(callback) {
-    var averageCost = 0;
-    var costs = this.state.countryInfo.costs;
+    const averageCost = 0;
+    const costs = this.state.countryInfo.costs;
     for (var i = 0; i < costs.length; i++) {
       if (costs[i].category_id === "0") {
         averageCost = costs[i][this.state.budget]
@@ -86,9 +86,9 @@ class App extends React.Component {
   calculatePlan(event) {
     event.preventDefault();
     this.calculateDailyCost((cost) => {
-      var perDay = (cost * this.state.conversionRate).toFixed(2);
-      var total = (perDay * this.state.days).toFixed();
-      var save = (total/this.state.monthsToGoal).toFixed(2);
+      const perDay = (cost * this.state.conversionRate).toFixed(2);
+      const total = (perDay * this.state.days).toFixed();
+      const save = (total/this.state.monthsToGoal).toFixed(2);
       this.setState({
         tripDetails: {
           dailyCost: perDay,
@@ -103,7 +103,7 @@ class App extends React.Component {
   }
 
   changeNumber(event) {
-    var value = parseInt(event.target.value) || undefined;
+    const value = parseInt(event.target.value) || undefined;
     this.setState({
       [event.target.name]: value,
     });
@@ -128,10 +128,10 @@ class App extends React.Component {
     this.setState({
       budget: event.target.value,
     }, () => {
-      var costs = this.state.countryInfo.costs;
+      const costs = this.state.countryInfo.costs;
       for (var i = 0; i < costs.length; i++) {
         if (costs[i].category_id === 1) {
-          var accomodation = costs[i][this.state.budget]
+          const accomodation = costs[i][this.state.budget]
         }
       }
     });
@@ -141,7 +141,7 @@ class App extends React.Component {
     this.setState({
       location: parseInt(event.target.value),
     }, () => {
-      var code = this.state.countries[this.state.location].country_code;
+      const code = this.state.countries[this.state.location].country_code;
       axios.get(`https://cors-anywhere.herokuapp.com/https://www.budgetyourtrip.com/api/v3/costs/countryinfo/${code}`)
         .then((res) => {
           this.setState({
@@ -175,7 +175,7 @@ class App extends React.Component {
         totalSpent += this.state.bills[bill];
       }
     }
-    var toSpend = this.state.pay - totalSpent;
+    const toSpend = this.state.pay - totalSpent;
     this.setState({
       toSpend: toSpend,
       showBudget: !this.state.showBudget,
