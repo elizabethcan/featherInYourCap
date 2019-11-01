@@ -187,17 +187,48 @@ class App extends React.Component {
     return (
       <div id="main-container">
         <div id="left-container">
-          <Country show={this.state.showGoals} countryInfo={this.state.countryInfo} countryHighlights={this.state.countryHighlights} conversionRate={this.state.conversionRate}/>
+          <Country
+            conversionRate={this.state.conversionRate}
+            countryInfo={this.state.countryInfo}
+            countryHighlights={this.state.countryHighlights}
+            show={this.state.showGoals}
+          />
         </div>
         <div id="right-container">
           <h1 id="header">Feather In Your Cap</h1>
           <div>
             <Landing />
-            <Plan show={this.state.showPlan} details={this.state.tripDetails} country={this.state.countryInfo}back={this.back}/>
-            <ToSpend toSpend={this.state.toSpend}/>
-            <Salary pay={this.state.pay} changePay={this.changeNumber} submit={this.submitPay} show={this.state.showPay}/>
-            <Bills show={this.state.showBudget} bills={this.state.bills} setBill={this.addBill} totalBills={this.totalBills}/>
-            <Travel show={this.state.showGoals} countries={this.state.countries} setCountry={this.setCountry} changeString={this.changeString} changeNumber={this.changeNumber} days={this.state.days} months={this.state.monthsToGoal} calculate={this.calculatePlan}/>
+            <Plan
+              back={this.back}
+              country={this.state.countryInfo}
+              details={this.state.tripDetails}
+              show={this.state.showPlan}
+            />
+            <ToSpend
+              toSpend={this.state.toSpend}
+            />
+            <Salary
+              changePay={this.changeNumber}
+              pay={this.state.pay}
+              show={this.state.showPay}
+              submit={this.submitPay}
+            />
+            <Bills
+              bills={this.state.bills}
+              setBill={this.addBill}
+              show={this.state.showBudget}
+              totalBills={this.totalBills}
+            />
+            <Travel
+              calculate={this.calculatePlan}
+              changeNumber={this.changeNumber}
+              changeString={this.changeString}
+              countries={this.state.countries}
+              days={this.state.days}
+              months={this.state.monthsToGoal}
+              setCountry={this.setCountry}
+              show={this.state.showGoals}
+            />
           </div>
         </div>
       </div>
