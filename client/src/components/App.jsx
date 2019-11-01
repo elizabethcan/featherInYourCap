@@ -73,7 +73,7 @@ class App extends React.Component {
   }
 
   calculateDailyCost(callback) {
-    const averageCost = 0;
+    var averageCost = 0;
     const costs = this.state.countryInfo.costs;
     for (var i = 0; i < costs.length; i++) {
       if (costs[i].category_id === "0") {
