@@ -1,10 +1,13 @@
 import React from 'react';
 
-const Countries = (props) => {
+const Countries = ({
+  countries,
+  setCountry
+}) => {
   return (
-    <select name="location" onChange={props.setCountry}>
+    <select name="location" onChange={setCountry}>
       <option>Select A Country</option>
-      {props.countries.map((country, index) => {
+      {countries.map((country, index) => {
         return <option value={index} key={index}>{country.name}</option>
       })}
     </select>
